@@ -1,0 +1,81 @@
+﻿@model Chat.ViewModels.ChatViewModel
+@{
+    int a = 0;
+}
+<input type="hidden" id="Author" value="@Model.avatarUser1.Id" />
+<input type="hidden" id="toUser" value="@Model.toUser" />
+<input type="hidden" id="User1Img" value="@Model.avatarUser1.Img" />
+<input type="hidden" id="User2Img" value="@Model.avatarUser2.Img" />
+
+<div id="blockScroll" class="row justify-content-center overflow-auto scrollbar scrollbar-near-moon" style="background-color: rgba(255, 255, 255, 0.5);">
+    <div class="col-sm-12 col-lg-5">
+        <div id="messagesList">
+            @if (Model.Messages != null)
+            {
+                foreach (var message in Model.Messages)
+                {
+                    a++;
+                    if (a == 1 || Model.Messages.ElementAt(a - 2).DateCreate.ToLongDateString() != message.DateCreate.ToLongDateString())
+                    {
+            <div class="text-center">
+                <span>@message.DateCreate.ToLongDateString()</span>
+            </div>
+                    }
+                    if (a == 1 || Model.Messages.ElementAt(a - 2).User1Id != message.User1Id || Model.Messages.ElementAt(a - 2).DateCreate.Subtract(message.DateCreate).Hours <= -1)
+                    {
+            <div id="@a" name="message" class="break-word mt-3 row">
+                <div id="cartinka" class="col-2">
+                    @if (message.User1Id == Model.avatarUser1.Id)
+                                {
+                    <img class="rounded-circle" style="width: 36px;height: 36px;object-fit: cover;object-position: 0 0;" src="@Model.avatarUser1.Img" />
+                                }
+                                else
+                                {
+                    <img class="rounded-circle" style="width: 36px;height: 36px;object-fit: cover;object-position: 0 0;" src="@Model.avatarUser2.Img" />
+                                }
+                </div>
+                <div class="col-6">
+                    <input type="hidden" id="LastTime" value="@message.DateCreate.ToString("d")" />
+                    <input type="hidden" id="LastAuthor" value="@message.User1Id" />
+                    <strong>@message.User1Id</strong> <small class="text-muted">@message.DateCreate.ToShortTimeString()</small><br />@message.Contect
+                </div>
+            </div>
+                    }
+                    else
+                    {
+            <div id="@a" class="break-word row">
+                <div class="col-2"></div>
+                <div class="col-10">
+                    @message.Contect
+                </div>
+            </div>
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<div class="row" style="background-color: rgba(255, 255, 255, 0.5);">
+    <div class="col-12">
+        <hr />
+    </div>
+</div>
+
+<input type="hidden" id="userInput" value="@User.Identity.Name" />
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-8 col-sm-12 md-form pink-textarea active-pink-textarea">
+            <i class="fas fa-angle-double-right prefix"></i>
+            <textarea id="messageInput" class="md-textarea form-control text-white" 
+                      style="background-color: rgba(255, 255, 255, 0.5);" rows="3"></textarea>
+            <label for="messageInput" class="text-white"></label>
+        </div>
+        <div class="col-12 text-center">
+            <button type="button" class="btn blue-gradient" id="sendButton" value="Send Message">Send</button>
+        </div>
+    </div>
+</div>
+
+
